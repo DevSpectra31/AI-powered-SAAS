@@ -87,8 +87,8 @@
         }
     )
 
-    } catch (error) {
-    return NextResponse.json({ error: "Upload video failed" }, { status: 500 });
+    } catch (error : any ) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
     }
     finally{
         await prisma.$disconnect()
