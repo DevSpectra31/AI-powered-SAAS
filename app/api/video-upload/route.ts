@@ -77,6 +77,7 @@
             duration:uploadResult.duration || 0
         }
     })
+    console.log(video)
     return NextResponse.json(
         {
             video,

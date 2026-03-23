@@ -26,9 +26,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
     <html lang="en">
-      <body
+      <body 
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <time dateTime="2016-10-25" suppressHydrationWarning />
         {children}
       </body>
     </html>
