@@ -34,17 +34,25 @@ const Videocard : React.FC<VideocardProps>=({video,onDownload})=> {
 
         })
     },[])
-     const getPreviewVideoUrl= useCallback((publicId:string)=>{
-        return getCldVideoUrl({
-            src: publicId,
-            width:400,
-            height:225,
-            rawTransformations :["e_preview:duration_15:max_seq_9_dur_1"]
-        })
-    },[])
-    const formatsize = useCallback((size : number)=>{
-        return filesize(size)
-    },[])
+    const getPreviewVideoUrl = useCallback((publicId: string) => {
+  return getCldVideoUrl({
+    src: publicId,
+    width: 400,
+    height: 225,
+    crop: "fill",
+    quality: "auto",
+    format: "mp4",
+  });
+}, []);
+    const formatSize = useCallback((size: any) => {
+  console.log("SIZE RECEIVED:", size, typeof size);
+
+  if (!size || typeof size !== "number" || isNaN(size)) {
+    return "0 B";
+  }
+
+  return filesize(size);
+}, []);
       const formatDuration = useCallback((seconds: number) => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = Math.round(seconds % 60);
@@ -76,13 +84,15 @@ const Videocard : React.FC<VideocardProps>=({video,onDownload})=> {
                 </div>
               ) : (
                 <video
-                  src={getPreviewVideoUrl(video.publicId)}
-                  autoPlay
-                  muted
-                  loop
-                  className="w-full h-full object-cover"
-                  onError={handlePreviewError}
-                />
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover"
+                    onError={handlePreviewError}
+                  >
+                    <source src={getPreviewVideoUrl(video.publicId)} type="video/mp4" />
+                  </video>
               )
             ) : (
               <img
@@ -109,14 +119,14 @@ const Videocard : React.FC<VideocardProps>=({video,onDownload})=> {
                 <FileUp size={18} className="mr-2 text-primary" />
                 <div>
                   <div className="font-semibold">Original</div>
-                  <div>{formatsize(Number(video.originalSize))}</div>
+                  <div>{formatSize(Number(video.originalSize))}</div>
                 </div>
               </div>
               <div className="flex items-center">
                 <FileDown size={18} className="mr-2 text-secondary" />
                 <div>
                   <div className="font-semibold">Compressed</div>
-                  <div>{formatsize(Number(video.compressedSize))}</div>
+                  <div>{formatSize(Number(video.compressedSize))}</div>
                 </div>
               </div>
             </div>
